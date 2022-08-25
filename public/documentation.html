@@ -10,6 +10,90 @@
 application provides users with access to information about different
 movies, directors, and genres. Users can sign up, update their
 personal information, and create a list of their favorite movies.</p>
-
+<table>
+	<legend>API Endpoint Documentation</legend>
+	<thead>
+		<tr>
+			<th>Endpoint</th>
+			<th>Method</th>
+			<th>Business Logic</th>
+			<th>Query parameters</th>
+			<th>Data format expected in request body</th>
+			<th>Data format for response data</th>
+	</thead>
+	<tbody>
+		<tr>
+			<th>/movies</th>
+			<th>GET</th>
+			<th>Return a list of ALL movies to the user</th>
+			<th> - </th>
+			<th>None (in URL)</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/movies/:title</th>
+			<th>GET</th>
+			<th>Return data (description, genre, director, image URL, whether it’s featured or not) about a single movie by title to the user</th>
+			<th>title</th>
+			<th>None (in URL)</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/movies/:genre/:genreName</th>
+			<th>GET</th>
+			<th>Return data about a genre (description) by name/title (e.g., “Thriller”)</th>
+			<th>genre, genreName</th>
+			<th>None (in URL)</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/movies/:directors/:directorName</th>
+			<th>GET</th>
+			<th>Return data about a director (bio, birth year, death year) by name</th>
+			<th>directors, directorName</th>
+			<th>None (in URL)</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/users</th>
+			<th>POST</th>
+			<th>Allow new users to register</th>
+			<th> - </th>
+			<th>JSON</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/users/:id</th>
+			<th>PUT</th>
+			<th>Allow users to update their user info (username)</th>
+			<th>id</th>
+			<th>JSON</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/users/:id/:movieTitle</th>
+			<th>POST</th>
+			<th>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</th>
+			<th>id, movieTitle</th>
+			<th>None (in URL)</th>
+			<th>Text confirmation message</th>
+		</tr>
+		<tr>
+			<th>/users/:id/:movieTitle</th>
+			<th>DELETE</th>
+			<th>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed</th>
+			<th>id, movieTitle</th>
+			<th>None (in URL)</th>
+			<th>Text confirmation message</th>
+		</tr>
+		<tr>
+			<th>/users/:id</th>
+			<th>DELETE</th>
+			<th>Allow existing users to deregister (showing only a text that a user email has been removed)</th>
+			<th>id</th>
+			<th>None (in URL)</th>
+			<th>Text confirmation message</th>
+		</tr>
+</tbody>
     </body>
 		</html>
