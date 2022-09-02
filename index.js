@@ -19,7 +19,17 @@ const Directors = Models.Director;
 
 mongoose.connect('mongodb://localhost:27017/movieAPI', {useNewUrlParser: true, useUnifiedTopology: true});
 
-
+//GET all users
+app.get('/users', (req, res) => {
+  Users.find()
+  .then((users) => {
+    res.status(201).json(users);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+  });
+});
 
 //READ GET all movies
 app.get('/movies', (req, res) => {
@@ -47,8 +57,8 @@ app.get('/movies/:Title', (req, res) => {
 
 
   //READ GET movies by genre
-  app.get('/movies/genre/:genreName', (req, res) => {
-    Movies.find({ "Genre.Name": req.params.Genre.Name})
+  app.get('/movies/genres/:Name', (req, res) => {
+    Movies.find({ "Genre.Name": req.params.Name})
     .then((movies) => {
       res.json(movies);
     })
@@ -59,10 +69,10 @@ app.get('/movies/:Title', (req, res) => {
   });
 
   //READ GET data about a genre
-  app.get('/genre/:Name', (req, res) => {
-    Genres.findOne({ Name: req.params.Name})
-    .then((genre) => {
-      res.json(genre);
+  app.get('/movies/genre/:Name', (req, res) => {
+    Movies.findOne({ "Genre.Name": req.params.Name})
+    .then((movies) => {
+      res.json(movies.Genre);
     })
     .catch((err) => {
       console.error(err);
@@ -72,9 +82,9 @@ app.get('/movies/:Title', (req, res) => {
 
     //READ GET director info by director name
   app.get('/movies/director/:Name', (req, res) => {
-    Directors.findOne({ Name: req.params.Name})
-    .then((director) => {
-      res.json(director);
+    Movies.findOne({ "Director.Name": req.params.Name})
+    .then((movies) => {
+      res.json(movies.Director);
     })
     .catch((err) => {
       console.error(err);
@@ -116,30 +126,6 @@ app.get('/movies/:Title', (req, res) => {
     });
   });
 
-  //READ GET all users
-  app.get('/users', (req, res) => {
-    Users.find()
-    .then((users) => {
-      res.status(201).json(users);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-  });
-
-  //READ GET a user by username
-  app.get('/users/:Username', (req, res) => {
-    Users.findOne({ Username: req.params.Username})
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    });
-  });
-
 
   //UPDATE a user's info by username, in JSON format
 //   {
@@ -170,9 +156,9 @@ app.get('/movies/:Title', (req, res) => {
   });
 
 //UPDATE AND CREATE -- add movie to user's list of favorites
-  app.post('/users/:Username/movies/:movieID', (req, res) => {
+  app.post('/users/:Username/movies/:_id', (req, res) => {
     Users.findOneAndUpdate({ Username: req.params.Username}, {
-      $push: { Favorite_Movies: req.params.MovieID }
+      $push: { Favorite_Movies: req.params._id }
     },
     {new: true},
     (err, updatedUser) => {
@@ -186,9 +172,9 @@ app.get('/movies/:Title', (req, res) => {
   });
 
   //DELETE movie from user favorites - still using findOneandUpdate rather than remove
-    app.delete('/users/:Username/movies/:movieID', (req, res) => {
+    app.delete('/users/:Username/movies/:_id', (req, res) => {
       Users.findOneAndUpdate({ Username: req.params.Username}, {
-        $pull: { Favorite_Movies: req.params.MovieID }
+        $pull: { Favorite_Movies: req.params._id }
       },
       {new: true},
       (err, updatedUser) => {
