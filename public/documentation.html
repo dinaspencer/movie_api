@@ -39,15 +39,23 @@ personal information, and create a list of their favorite movies.</p>
 			<th>JSON</th>
 		</tr>
 		<tr>
-			<th>/movies/:genre/:genreName</th>
+			<th>/movies/genres/:eName</th>
 			<th>GET</th>
-			<th>Return data about a genre (description) by name/title (e.g., “Thriller”)</th>
-			<th>genre, genreName</th>
+			<th>Return a list of movies by genre using the genre name</th>
+			<th>genre, GenreName</th>
 			<th>None (in URL)</th>
 			<th>JSON</th>
 		</tr>
 		<tr>
-			<th>/movies/:directors/:directorName</th>
+			<th>/movies/:genre/:Name</th>
+			<th>GET</th>
+			<th>Return data about a genre (description) by name of the genre (e.g., "Superhero")</th>
+			<th>genreName</th>
+			<th>None (in URL)</th>
+			<th>JSON</th>
+		</tr>
+		<tr>
+			<th>/movies/:director/:Name</th>
 			<th>GET</th>
 			<th>Return data about a director (bio, birth year, death year) by name</th>
 			<th>directors, directorName</th>
@@ -59,38 +67,54 @@ personal information, and create a list of their favorite movies.</p>
 			<th>POST</th>
 			<th>Allow new users to register</th>
 			<th> - </th>
-			<th>JSON</th>
+			<th>JSON {
+  Username: String,
+  (required)
+  Password: String,
+  (required)
+  Email: String,
+  (required)
+  Birthday: Date
+}</th>
 			<th>JSON</th>
 		</tr>
 		<tr>
-			<th>/users/:id</th>
+			<th>/users/:Username</th>
 			<th>PUT</th>
 			<th>Allow users to update their user info (username)</th>
-			<th>id</th>
-			<th>JSON</th>
+			<th>Username</th>
+			<th>JSON {
+  Username: String,
+  (required)
+  Password: String,
+  (required)
+  Email: String,
+  (required)
+  Birthday: Date
+}</th>
 			<th>JSON</th>
 		</tr>
 		<tr>
-			<th>/users/:id/:movieTitle</th>
+			<th>/users/:Username/:_id</th>
 			<th>POST</th>
 			<th>Allow users to add a movie to their list of favorites (showing only a text that a movie has been added)</th>
-			<th>id, movieTitle</th>
+			<th>Username, _id</th>
 			<th>None (in URL)</th>
-			<th>Text confirmation message</th>
+			<th>JSON of updated user data</th>
 		</tr>
 		<tr>
-			<th>/users/:id/:movieTitle</th>
+			<th>/users/:Username/:_id</th>
 			<th>DELETE</th>
 			<th>Allow users to remove a movie from their list of favorites (showing only a text that a movie has been removed</th>
-			<th>id, movieTitle</th>
+			<th>Username, _id</th>
 			<th>None (in URL)</th>
-			<th>Text confirmation message</th>
+			<th>JSON of updated user data</th>
 		</tr>
 		<tr>
-			<th>/users/:id</th>
+			<th>/users/:Username</th>
 			<th>DELETE</th>
 			<th>Allow existing users to deregister (showing only a text that a user email has been removed)</th>
-			<th>id</th>
+			<th>Username</th>
 			<th>None (in URL)</th>
 			<th>Text confirmation message</th>
 		</tr>
