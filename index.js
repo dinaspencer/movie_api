@@ -12,6 +12,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+const cors = require('cors');
+app.use(cors());
+
+const { check, validationResult } = require('express-validator');
 //import auth files
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -19,8 +23,8 @@ require('./passport');
 
 const Movies = Models.Movie;
 const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Director;
+//const Genres = Models.Genre;
+//const Directors = Models.Director;
 
 mongoose.connect('mongodb://localhost:27017/movieAPI', {useNewUrlParser: true, useUnifiedTopology: true});
 
@@ -106,7 +110,21 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
 //   Email: String,
 //   Birthday: Date
 // }
-  app.post('/users', (req, res) => {
+  app.post('/users',
+  //validation logic for username, password and email
+  [
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters, not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required.').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid.').isEmail()
+  ], (req, res) => {
+    //check validation object for errors
+    let errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      return res.status(422).json({errors: errors.array()});
+    }
+    //hash the password
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ Username: req.body.Username})
     .then((user) => {
       if (user) {
@@ -114,7 +132,7 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
       } else {
         Users.create({
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday
         })
@@ -139,12 +157,24 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
 //   Email: String, required
 //   Birthday: Date
 // }
-  app.put('/users/:Username', passport.authenticate('jwt', {session: false}), (req, res) => {
+  app.put('/users/:Username', passport.authenticate('jwt', {session: false}), [
+    //validation logic for updating info
+    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username contains non alphanumeric characters, not allowed.').isAlphanumeric(),
+    check('Password', 'Password is required.').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid.').isEmail()
+  ], (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    //hash password
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOneAndUpdate({ Username: req.params.Username },
     { $set:
       {
         Username: req.body.Username,
-        Password: req.body.Password,
+        Password: hashedPassword,
         Email: req.body.Email,
         Birthday: req.body.Birthday
       }
