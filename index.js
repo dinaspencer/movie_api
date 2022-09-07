@@ -26,7 +26,8 @@ const Users = Models.User;
 //const Genres = Models.Genre;
 //const Directors = Models.Director;
 
-mongoose.connect('mongodb://localhost:27017/movieAPI', {useNewUrlParser: true, useUnifiedTopology: true});
+//mongoose.connect('mongodb://localhost:27017/movieAPI', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect(process.env.connection_uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 //GET all users
 app.get('/users', (req, res) => {
