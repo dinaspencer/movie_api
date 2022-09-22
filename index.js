@@ -43,7 +43,7 @@ app.get('/users', (req, res) => {
 
 //READ GET all movies
 app.get('/movies', 
-  passport.authenticate('jwt', {session: false}), 
+passport.authenticate('jwt', {session: false}), 
   (req, res) => {
   Movies.find()
   .then((movies) => {
@@ -113,10 +113,10 @@ app.get('/movies/:Title', passport.authenticate('jwt', {session: false}), (req, 
 //   Email: String,
 //   Birthday: Date
 // }
-  app.post('/users',
+  app.post('/registration',
   //validation logic for username, password and email
   [
-    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username is required').isLength({min: 2}),
     check('Username', 'Username contains non alphanumeric characters, not allowed.').isAlphanumeric(),
     check('Password', 'Password is required.').not().isEmpty(),
     check('Email', 'Email does not appear to be valid.').isEmail()
