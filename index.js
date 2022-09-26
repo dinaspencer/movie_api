@@ -42,7 +42,7 @@ app.get('/users', (req, res) => {
 });
 
 app.get('/users/:Username', (req, res) => {
-  Users.findOne({ Username: req.params.Username})
+  Users.findOne({ Username: req.params.Username}).select('-Password')
   .then((user) => {
     res.status(201).json(user);
   })
